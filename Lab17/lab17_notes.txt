@@ -1,0 +1,13 @@
+Blind SQL injection with out-of-band data exfiltration
+
+vulnerable parameter: tracking cookie.
+
+End Goal:
+
+1. exploit the blind SQLi to output administrator user password.
+
+2. Login as administrator.
+
+Analysis:
+
+UNION SELECT username || '-' || password FROM users

